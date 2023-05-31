@@ -1,5 +1,5 @@
 ## stable-diffusion-tf-docker
-Stable Diffusion in Docker with a simple web API and GPU support
+Hi Ho Stable Diffusion in Docker with a simple web API and GPU support
 
 ## What is this?
 [Stable Diffusion](https://github.com/CompVis/stable-diffusion) is a latent text-to-image diffusion model, made possible thanks to a collaboration with Stability AI and Runway.
