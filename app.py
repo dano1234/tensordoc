@@ -39,10 +39,79 @@ from diffusers import (
     LMSDiscreteScheduler
 )
 
+###############
 
 
 
+from PIL import Image
+from io import BytesIO
+import base64
+import skimage
+import numpy 
 
+def encodeb64(image) -> str:
+
+    # convert image to bytes
+    with BytesIO() as output_bytes:
+        PIL_image = Image.fromarray(skimage.img_as_ubyte(image))
+        PIL_image.save(output_bytes, 'JPEG') # Note JPG is not a vaild type here
+        bytes_data = output_bytes.getvalue()
+
+    # encode bytes to base64 string
+    base64_str = str(base64.b64encode(bytes_data), 'utf-8')
+    return base64_str
+
+def interpolateBetweenAllLatents(latents):
+    previousLatent = np.array(latents[0])  # Initialize a vector of zeros with the same length as the input vectors
+
+ 
+    num_latents= len(latents)
+    
+    for i in range(1, num_latents): 
+        newLatent= np.array(json.loads(latents[i]))
+        previousLatent = interpolate(0.5,previousLatent,newLatent)
+
+    return previousLatent
+
+def interpolate(t, v0, v1, DOT_THRESHOLD=0.9995):
+  """Helper function to (spherically) interpolate two arrays v1 v2.
+  Taken from: https://gist.github.com/karpathy/00103b0037c5aaea32fe1da1af553355
+  """
+  inputs_are_torch = False
+  if not isinstance(v0, np.ndarray):
+    inputs_are_torch = True
+    input_device = v0.device
+    v0 = v0.cpu().numpy()
+    v1 = v1.cpu().numpy()
+    #print("came in on device")
+  #else:
+    #print("came in off device")
+
+  dot = np.sum(v0 * v1 / (np.linalg.norm(v0) * np.linalg.norm(v1)))
+  if np.abs(dot) > DOT_THRESHOLD:
+    v2 = (1 - t) * v0 + t * v1
+  else:
+    theta_0 = np.arccos(dot)
+    sin_theta_0 = np.sin(theta_0)
+    theta_t = theta_0 * t
+    sin_theta_t = np.sin(theta_t)
+    s0 = np.sin(theta_0 - theta_t) / sin_theta_0
+    s1 = sin_theta_t / sin_theta_0
+    v2 = s0 * v0 + s1 * v1
+
+  if inputs_are_torch:
+    v2 = torch.from_numpy(v2).to(input_device)
+    #print("were returned to device")
+
+  return v2
+
+def generateFromOnlyLatent(pipeline, latents):
+  latents = 1 / 0.18215 * latents
+  image = pipeline.vae.decode(latents).sample
+  image = (image / 2 + 0.5).clamp(0, 1)
+  # we always cast to float32 as this does not cause significant overhead and is compatible with bfloa16
+  image = image.cpu().permute(0, 2, 3, 1).float().numpy()
+  return image
 
 
 
