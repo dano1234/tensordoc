@@ -38,7 +38,7 @@ class GenerationResult(BaseModel):
 def home():
     return {"message": "See /docs for documentation"}
 
-@app.post("/generate", response_model=GenerationResult)
+@app.post("/generatee", response_model=GenerationResult)
 def generate(req: GenerationRequest):
     start = time.time()
     id = str(uuid.uuid4())
