@@ -19,7 +19,45 @@ if mixed_precision:
 
 generator = StableDiffusion(img_height=height, img_width=width, jit_compile=False)
 
+
+
+
+import inspect
+from typing import List, Optional, Union
+
+import numpy as np
+import torch
+
+import PIL
+#import gradio as gr
+#from diffusers import DiffusionPipeline, StableDiffusionInpaintPipeline,  DPMSolverMultistepScheduler
+from diffusers import (
+    StableDiffusionPipeline,
+    StableDiffusionImg2ImgPipeline,
+    StableDiffusionInpaintPipeline,
+    DPMSolverMultistepScheduler,
+    LMSDiscreteScheduler
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 app = FastAPI(title="Stable Diffusion API")
+
+
+
 
 
 class GenerationRequest(BaseModel):
