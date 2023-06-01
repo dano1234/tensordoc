@@ -2,9 +2,9 @@ from tensorflow/tensorflow:2.10.0-gpu
 
 RUN apt update && \
     apt install -y git && \
-    pip install --no-cache-dir scikit-image==0.19.3 Pillow==9.2.0 tqdm==4.64.1\
-    ftfy==6.1.1 regex==2022.9.13 torch nest-asyncio==1.5.6 transformers diffusers\
-    fastapi "uvicorn[standard]" git+https://github.com/divamgupta/stable-diffusion-tensorflow.git
+    pip install --no-cache-dir scikit-image==0.19.3 \
+    ftfy==6.1.1 torch nest-asyncio==1.5.6 transformers diffusers\
+    fastapi "uvicorn[standard]" 
 
 WORKDIR /app
 
