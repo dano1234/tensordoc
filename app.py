@@ -114,9 +114,100 @@ def generateFromOnlyLatent(pipeline, latents):
   return image
 
 
+###########################
+
+device = "cuda"
+
+repo_id = "stabilityai/stable-diffusion-2-base"
+
+class MyPipelineTxt2Img(StableDiffusionPipeline):
+
+  def _encode_prompt(self, prompt, device, num_images_per_prompt, do_classifier_free_guidance, negative_prompt,prompt_embeds,negative_prompt_embeds):
+    te = super()._encode_prompt(prompt, device, num_images_per_prompt, do_classifier_free_guidance, negative_prompt,prompt_embeds,negative_prompt_embeds)
+    self.trans_text_embeddings = te
+    if self.use_supplied_text_embeddings  ==  True:
+      te = self.supplied_text_embeddings
+    else:
+      te = super()._encode_prompt(prompt, device, num_images_per_prompt, do_classifier_free_guidance, negative_prompt,prompt_embeds,negative_prompt_embeds)
+      self.trans_text_embeddings = te
+    self.use_supplied_text_embeddings =  False
+    return te
+
+  def prepare_latents(self, batch_size, num_channels_latents, height, width, dtype, device, generator,latents):
+    if self.use_supplied_prepared_latents  ==  True:
+      prepared_latents = self.supplied_prepared_latents
+    else:
+      prepared_latents = super().prepare_latents(batch_size, num_channels_latents, height, width, dtype, device, generator,latents)
+    self.trans_prepared_latents = prepared_latents
+    self.use_supplied_prepared_latents =  False
+    return prepared_latents
+
+  def decode_latents(self,latents):
+    self.trans_latents = latents #json_str;
+    image = super().decode_latents(latents)
+    return image
+
+pipeTxt2Img = MyPipelineTxt2Img.from_pretrained(
+    repo_id, 
+    revision="fp16", 
+    torch_dtype=torch.float16, 
+    use_auth_token=True
+    )
+pipeTxt2Img.use_supplied_text_embeddings  = False
+pipeTxt2Img.scheduler = DPMSolverMultistepScheduler.from_config(pipeTxt2Img.scheduler.config)
+pipeTxt2Img.to(device)
+
+
+repo_id = "stabilityai/stable-diffusion-2-inpainting"
+
+class MyPipelineInpainting(StableDiffusionInpaintPipeline):  
+  def _encode_prompt(self, prompt, device, num_images_per_prompt, do_classifier_free_guidance, negative_prompt):
+    te = super()._encode_prompt(prompt, device, num_images_per_prompt, do_classifier_free_guidance, negative_prompt)
+    self.trans_text_embeddings = te
+    return te
+  def decode_latents(self,latents):
+    self.trans_latents = latents #json_str;
+    image = super().decode_latents(latents)
+    return image
+pipeInpainting = MyPipelineInpainting.from_pretrained(  #repo_id,**pipeTxt2Img.components)
+    repo_id,
+    revision="fp16", 
+    torch_dtype=torch.float16,
+    use_auth_token=True
+    )
+pipeInpainting.scheduler = DPMSolverMultistepScheduler.from_config(pipeInpainting.scheduler.config)
+pipeInpainting.to(device)
+
+repo_id = "stabilityai/stable-diffusion-2-base"
+
+class MyPipelineImg2Img(StableDiffusionImg2ImgPipeline):  
+  def _encode_prompt(self, prompt, device, num_images_per_prompt, do_classifier_free_guidance, negative_prompt,prompt_embeds,negative_prompt_embeds):
+    te = super()._encode_prompt(prompt, device, num_images_per_prompt, do_classifier_free_guidance, negative_prompt,prompt_embeds,negative_prompt_embeds)
+    self.trans_text_embeddings = te
+    return te
+    
+  def prepare_latents(self, image, timestep, batch_size, num_images_per_prompt, dtype, device, generator=None):
+    if self.use_supplied_prepared_latents  ==  True:
+      prepared_latents = self.supplied_prepared_latents
+    else:
+      prepared_latents = super().prepare_latents( image, timestep, batch_size, num_images_per_prompt, dtype, device, generator=None)
+    self.trans_prepared_latents = prepared_latents
+    self.use_supplied_prepared_latents =  False
+    return prepared_latents
+
+  def decode_latents(self,latents):
+    self.trans_latents = latents #json_str;
+    image = super().decode_latents(latents)
+    return image
 
 
 
+pipeImg2Img = MyPipelineImg2Img.from_pretrained(  repo_id,**pipeTxt2Img.components)
+pipeImg2Img.use_supplied_prepared_latents = False
+pipeImg2Img.scheduler = LMSDiscreteScheduler.from_config(pipeImg2Img.scheduler.config)
+pipeImg2Img.to(device)
+
+#######################################
 
 
 
