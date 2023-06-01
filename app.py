@@ -10,11 +10,11 @@ print("huggingface_key")
 print(huggingface_key)
 login(token='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')
 
-print("checking CUDA")
-print(f"Is CUDA available: {torch.cuda.is_available()}")
-# True
-print(
-    f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
+# print("checking CUDA")
+# print(f"Is CUDA available: {torch.cuda.is_available()}")
+# # True
+# print(
+#     f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
 
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
