@@ -227,7 +227,7 @@ from pydantic.errors import NoneIsNotAllowedError
 from fastapi import FastAPI
 import nest_asyncio
 import json
-#from pyngrok import ngrok
+from pyngrok import ngrok
 import uvicorn
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
@@ -537,10 +537,10 @@ async def create_item(oneImage: OneImage):
   json_compatible_item_data = jsonable_encoder(d)
   return JSONResponse(content=json_compatible_item_data)
 
-#ngrok_tunnel = ngrok.connect(8000)
-#print('Public URL:', ngrok_tunnel.public_url)
-#nest_asyncio.apply()
-#uvicorn.run(app, port=8000)
+ngrok_tunnel = ngrok.connect(8000)
+print('Public URL:', ngrok_tunnel.public_url)
+nest_asyncio.apply()
+uvicorn.run(app, port=8000)
 
 
 
