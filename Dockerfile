@@ -9,5 +9,5 @@ RUN apt update && \
 WORKDIR /app
 
 COPY ./app.py /app/app.py
-
-CMD uvicorn --host 0.0.0.0 app:app
+#uvicorn.
+CMD uvicorn --host 0.0.0.0 app:app 
