@@ -1,0 +1,10 @@
+scikit-image==0.19.3
+ftfy==6.1.1 
+torch 
+nest-asyncio==1.5.6 
+transformers 
+diffusers 
+accelerate 
+pyngrok
+fastapi
+uvicorn[standard]
