@@ -1,7 +1,10 @@
 from tensorflow/tensorflow:2.10.0-gpu
 
-RUN pip install --no-cache-dir --upgrade -r ./requirements.txt
+WORKDIR /code
 
+COPY ./requirements.txt /code/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 WORKDIR /app
 
