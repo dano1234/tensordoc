@@ -10,28 +10,28 @@ print("huggingface_key")
 print(huggingface_key)
 login(token='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')
 
-# print("checking CUDA")
-# print(f"Is CUDA available: {torch.cuda.is_available()}")
-# # True
-# print(
-#     f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
+print("checking CUDA")
+print(f"Is CUDA available: {torch.cuda.is_available()}")
+# True
+print(
+    f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
 
-# from fastapi import FastAPI
-# from fastapi.exceptions import HTTPException
-# from fastapi.responses import FileResponse
-# from PIL import Image
-# from pydantic import BaseModel, Field
-# from stable_diffusion_tf.stable_diffusion import StableDiffusion
-# from tensorflow import keras
+from fastapi import FastAPI
+from fastapi.exceptions import HTTPException
+from fastapi.responses import FileResponse
+from PIL import Image
+from pydantic import BaseModel, Field
+from stable_diffusion_tf.stable_diffusion import StableDiffusion
+from tensorflow import keras
 
-# height = int(os.environ.get("WIDTH", 512))
-# width = int(os.environ.get("WIDTH", 512))
-# mixed_precision = os.environ.get("MIXED_PRECISION", "no") == "yes"
+height = int(os.environ.get("WIDTH", 512))
+width = int(os.environ.get("WIDTH", 512))
+mixed_precision = os.environ.get("MIXED_PRECISION", "no") == "yes"
 
-# if mixed_precision:
-#     keras.mixed_precision.set_global_policy("mixed_float16")
+if mixed_precision:
+    keras.mixed_precision.set_global_policy("mixed_float16")
 
-# generator = StableDiffusion(img_height=height, img_width=width, jit_compile=False)
+generator = StableDiffusion(img_height=height, img_width=width, jit_compile=False)
 
 
 
