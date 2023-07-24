@@ -2,20 +2,6 @@ import os
 import time
 import uuid
 
-
-from huggingface_hub import login
-
-huggingface_key = os.environ.get("huggingface_key")
-print("huggingface_key")
-print(huggingface_key)
-login(token='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')
-
-# print("checking CUDA")
-# print(f"Is CUDA available: {torch.cuda.is_available()}")
-# # True
-# print(
-#     f"CUDA device: {torch.cuda.get_device_name(torch.cuda.current_device())}")
-
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 from fastapi.responses import FileResponse
@@ -32,8 +18,6 @@ if mixed_precision:
     keras.mixed_precision.set_global_policy("mixed_float16")
 
 generator = StableDiffusion(img_height=height, img_width=width, jit_compile=False)
-
-
 
 
 import inspect
