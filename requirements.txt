@@ -8,3 +8,4 @@ accelerate
 pyngrok
 fastapi
 uvicorn[standard]
+pydantic
