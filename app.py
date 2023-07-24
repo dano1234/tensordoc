@@ -223,7 +223,7 @@ pipeImg2Img.to(device)
 
 #######################################
 
-#from pydantic.errors import NoneIsNotAllowedError
+from pydantic.errors import NoneIsNotAllowedError
 from fastapi import FastAPI
 import nest_asyncio
 import json
